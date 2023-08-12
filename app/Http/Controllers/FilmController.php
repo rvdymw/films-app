@@ -92,4 +92,28 @@ protected function resizeAndSaveCover($coverPath)
 
     return $newCoverPath;
 }
+
+
+public function rate(Request $request, Film $film)
+{
+    $user_id = auth()->user()->id;
+    $rating = $request->input('rating');
+
+    $existingRating = Rating::where('film_id', $film->id)
+        ->where('user_id', $user_id)
+        ->first();
+
+    if ($existingRating) {
+        $existingRating->rating = $rating;
+        $existingRating->save();
+    } else {
+        Rating::create([
+            'film_id' => $film->id,
+            'user_id' => $user_id,
+            'rating' => $rating,
+        ]);
+    }
+
+    return response()->json(['message' => 'Rating added successfully']);
+}
 }
