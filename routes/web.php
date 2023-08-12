@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('films/{film}/rate', [FilmController::class, 'rate'])->name('films.rate');
